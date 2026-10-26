@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Ananya & Aarav — The Royal Emerald Invitation</title>
+  <meta name="description" content="Tap the Royal Wax Seal to unseal the wedding celebration of Ananya Sharma & Aarav Rajput." />
+
+  <!-- Google Fonts: Cinzel Decorative, Cormorant Garamond & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React 18 & Babel Standalone for Zero-Build Deployment -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    .royal-display {
+      font-family: 'Cinzel Decorative', Georgia, serif;
+    }
+    .royal-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #041612;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes floatUpSlow {
+      0% {
+        transform: translateY(100%) translateX(0px) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.75;
+      }
+      80% {
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(-120px) translateX(25px) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    @keyframes burstPetal {
+      0% {
+        transform: translate(0, 0) scale(0.4) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(var(--rot));
+        opacity: 0;
+      }
+    }
+
+    @keyframes sealPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(229, 193, 88, 0.6), 0 12px 30px rgba(0, 0, 0, 0.75);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 16px rgba(229, 193, 88, 0), 0 16px 38px rgba(229, 193, 88, 0.45);
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes stageReveal {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes shimmerSweep {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .firefly-particle {
+      animation: floatUpSlow linear infinite;
+    }
+    .wax-seal-glow {
+      animation: sealPulse 2.4s infinite ease-in-out;
+    }
+    .stage-transition {
+      animation: stageReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .petal-burst-item {
+      animation: burstPetal 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .gold-shimmer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 248, 220, 0.38), transparent);
+      animation: shimmerSweep 3.2s infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+    // ============================================================================
+    // INLINE SVG ICONS
+    // ============================================================================
+    const Icon = ({ children, className = "w-4 h-4" }) => (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        {children}
+      </svg>
+    );
+
+    const SparklesIcon = ({ className }) => (
+      <Icon className={className}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></Icon>
+    );
+    const HeartIcon = ({ className }) => (
+      <Icon className={className}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></Icon>
+    );
+    const ChevronLeftIcon = ({ className }) => (
+      <Icon className={className}><polyline points="15 18 9 12 15 6" /></Icon>
+    );
+    const ChevronRightIcon = ({ className }) => (
+      <Icon className={className}><polyline points="9 18 15 12 9 6" /></Icon>
+    );
+    const CalendarIcon = ({ className }) => (
+      <Icon className={className}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></Icon>
+    );
+    const MapPinIcon = ({ className }) => (
+      <Icon className={className}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></Icon>
+    );
+    const Share2Icon = ({ className }) => (
+      <Icon className={className}><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></Icon>
+    );
+    const PlayIcon = ({ className }) => (
+      <Icon className={className}><polygon points="5 3 19 12 5 21 5 3" /></Icon>
+    );
+    const PauseIcon = ({ className }) => (
+      <Icon className={className}><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></Icon>
+    );
+    const Volume2Icon = ({ className }) => (
+      <Icon className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></Icon>
+    );
+    const VolumeXIcon = ({ className }) => (
+      <Icon className={className}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></Icon>
+    );
+    const CheckIcon = ({ className }) => (
+      <Icon className={className}><polyline points="20 6 9 17 4 12" /></Icon>
+    );
+    const XIcon = ({ className }) => (
+      <Icon className={className}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></Icon>
+    );
+    const LayersIcon = ({ className }) => (
+      <Icon className={className}><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></Icon>
+    );
+    const GridIcon = ({ className }) => (
+      <Icon className={className}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></Icon>
+    );
+    const RotateCcwIcon = ({ className }) => (
+      <Icon className={className}><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></Icon>
+    );
+
+    // ============================================================================
+    // WEDDING CONFIGURATION & GITHUB PUBLIC/ASSETS PATHS
+    // ============================================================================
+    const WEDDING_CONFIG = {
+      couple: {
+        brideName: 'Ananya Sharma',
+        brideShort: 'Ananya',
+        brideBio: 'Architect & classical kathak dancer with a love for heritage art, monsoon chai, and starry Jaipur nights.',
+        groomName: 'Aarav Rajput',
+        groomShort: 'Aarav',
+        groomBio: 'Entrepreneur & vintage vinyl collector who believes every great love story deserves its own royal soundtrack.',
+        monogram: 'A & A',
+        tagline: 'Two Hearts. One Beautiful Beginning.',
+        invitationMessage:
+          'Together with our families, we invite you to celebrate the beginning of our forever.',
+        storyQuote:
+          'What started as a conversation under fairy lights blossomed into a lifetime promise sealed in Jaipur.',
+        closingMessage:
+          'We cannot wait to celebrate this beautiful beginning with you.'
+      },
+      weddingDateISO: '2027-02-15T19:00:00+05:30',
+      weddingDateDisplay: '15 February 2027',
+      venue: {
+        name: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+        shortCity: 'Jaipur, Rajasthan',
+        mapsQuery: 'The Royal Orchid Palace, Jaipur, Rajasthan'
+      },
+      // Exact same GitHub public/assets paths so your uploaded files work automatically!
+      assets: {
+        bridePng: 'public/assets/bride-ananya.png',
+        groomPng: 'public/assets/groom-aarav.png',
+        couplePortrait: 'public/assets/couple-portrait.webp',
+        coupleFallback: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=85',
+        musicUrl: 'public/assets/wedding-music.mp3'
+      },
+      gallery: [
+        {
+          id: 'mem-1',
+          title: 'Couple Portrait',
+          caption: 'Royal courtyard portraits at dusk in Jaipur',
+          url: 'public/assets/gallery-1.jpg',
+          fallback: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          id: 'mem-2',
+          title: 'Traditional Indian Outfits',
+          caption: 'Handcrafted Zardozi heirloom ensembles & heritage jewels',
+          url: 'public/assets/gallery-2.jpg',
+          fallback: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          id: 'mem-3',
+          title: 'Outdoor Romantic Portrait',
+          caption: 'Golden hour strolls along the palace sandstone colonnade',
+          url: 'public/assets/gallery-3.jpg',
+          fallback: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          id: 'mem-4',
+          title: 'Candid Laughter',
+          caption: 'Unscripted joy amidst marigolds and rose petals',
+          url: 'public/assets/gallery-4.jpg',
+          fallback: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          id: 'mem-5',
+          title: 'Engagement Moment',
+          caption: 'The sacred exchange of rings & blessings from elders',
+          url: 'public/assets/gallery-5.jpg',
+          fallback: 'https://images.unsplash.com/photo-1545232972-907699a2f158?auto=format&fit=crop&w=900&q=80'
+        },
+        {
+          id: 'mem-6',
+          title: 'Close-up Portrait',
+          caption: 'Intricate Mehendi, Kundan bangles & timeless promises',
+          url: 'public/assets/gallery-6.jpg',
+          fallback: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80'
+        }
+      ],
+      events: [
+        {
+          id: 'haldi',
+          dayTag: 'Day 01 • Morning',
+          title: 'Haldi',
+          subtitle: 'Sunlight, Turmeric & Marigold Showers',
+          date: '13 February 2027',
+          time: '11:00 AM',
+          venue: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+          dressCode: 'Sunshine Yellow & Ivory',
+          swatch: ['#F59E0B', '#FEF3C7', '#D97706'],
+          vibe: 'Folk Dhol, Marigold Cannons &Phoolon Ki Holi',
+          description:
+            'A vibrant morning courtyard celebration filled with auspicious turmeric blessings, dhol beats, and organic marigold showers.'
+        },
+        {
+          id: 'mehendi',
+          dayTag: 'Day 01 • Sundowner',
+          title: 'Mehendi',
+          subtitle: 'Henna Artistry & Sufi Acoustic Sundowner',
+          date: '13 February 2027',
+          time: '5:00 PM',
+          venue: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+          dressCode: 'Emerald, Pistachio & Pastel Brocades',
+          swatch: ['#10B981', '#065F46', '#A7F3D0'],
+          vibe: 'Rajasthani Folk Fusion, Bangle Bazaar & Chaat Counter',
+          description:
+            'Intricate bridal henna stories painted onto hands while folk musicians fill the golden sunset breeze with soulful melodies.'
+        },
+        {
+          id: 'sangeet',
+          dayTag: 'Day 02 • Night',
+          title: 'Sangeet',
+          subtitle: 'Starlit Glamour, Choreography & Toasts',
+          date: '14 February 2027',
+          time: '7:00 PM',
+          venue: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+          dressCode: 'Metallic Gold, Midnight Blue & Mirror Work',
+          swatch: ['#E5C158', '#1E293B', '#94A3B8'],
+          vibe: 'High-Energy Family Dance Battles & Live DJ Afterparty',
+          description:
+            'An electrifying night beneath crystal chandeliers featuring family dance medleys, champagne toasts, and celebratory music.'
+        },
+        {
+          id: 'wedding',
+          dayTag: 'Day 03 • Royal Muhurtham',
+          title: 'Wedding Ceremony',
+          subtitle: 'Royal Baraat, Varmala & Sacred Pheras',
+          date: '15 February 2027',
+          time: '7:00 PM',
+          venue: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+          dressCode: 'Traditional Royal Crimson, Gold & Heritage Silk',
+          swatch: ['#991B1B', '#E5C158', '#FFFBEB'],
+          vibe: 'Vintage Royal Procession, Shehnai & Sacred Mandap',
+          description:
+            'Following the grand Baraat procession, join us beneath the lotus mandap as Ananya and Aarav take their seven sacred vows.'
+        },
+        {
+          id: 'reception',
+          dayTag: 'Day 04 • Finale',
+          title: 'Reception',
+          subtitle: 'The Royal Banquet & Orchestra Under the Stars',
+          date: '16 February 2027',
+          time: '7:30 PM',
+          venue: 'The Royal Orchid Palace, Jaipur, Rajasthan',
+          dressCode: 'Black Tie / Bandhgala & Heritage Sarees',
+          swatch: ['#064E3B', '#D4AF37', '#111827'],
+          vibe: 'Candlelit Royal Banquet, Speeches & First Dance',
+          description:
+            'A starlit royal banquet welcoming the newlyweds with artisanal Awadhi and Rajasthani cuisine and heartfelt toasts.'
+        }
+      ]
+    };
+
+    const CHAPTERS = [
+      { index: 0, code: '01', name: 'Royal Seal' },
+      { index: 1, code: '02', name: 'The Couple' },
+      { index: 2, code: '03', name: 'Polaroids' },
+      { index: 3, code: '04', name: 'Scratch Date' },
+      { index: 4, code: '05', name: 'Itinerary' },
+      { index: 5, code: '06', name: 'The Venue' }
+    ];
+
+    const copyToClipboard = (text) => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+        return;
+      }
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    };
+
+    // ============================================================================
+    // SMART IMAGE WITH AUTOMATIC FALLBACK (Uses public/assets/ first, then Unsplash)
+    // ============================================================================
+    const SmartImage = ({ src, fallback, alt, className = "" }) => {
+      const [imgSrc, setImgSrc] = useState(src);
+      useEffect(() => {
+        setImgSrc(src);
+      }, [src]);
+      return (
+        <img
+          src={imgSrc}
+          alt={alt}
+          onError={() => {
+            if (fallback && imgSrc !== fallback) setImgSrc(fallback);
+          }}
+          className={className}
+        />
+      );
+    };
+
+    // ============================================================================
+    // TRANSPARENT BRIDE & GROOM CHARACTERS (Loads public/assets/*.png or SVG)
+    // ============================================================================
+    const RoyalBrideCharacter = ({ customPng, className = "h-36 sm:h-44" }) => {
+      const [failed, setFailed] = useState(false);
+      if (customPng && !failed) {
+        return (
+          <img
+            src={customPng}
+            alt="Bride Ananya Sharma"
+            onError={() => setFailed(true)}
+            className={`object-contain select-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] ${className}`}
+          />
+        );
+      }
+      return (
+        <svg viewBox="0 0 200 320" fill="none" className={`select-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] ${className}`} role="img" aria-label="Illustrated Bride Ananya">
+          <defs>
+            <linearGradient id="emeraldGold" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FDE68A" />
+              <stop offset="50%" stopColor="#D4AF37" />
+              <stop offset="100%" stopColor="#926F1E" />
+            </linearGradient>
+            <linearGradient id="crimsonSilk" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#B91C1C" />
+              <stop offset="60%" stopColor="#881337" />
+              <stop offset="100%" stopColor="#4C0519" />
+            </linearGradient>
+          </defs>
+          {/* Halo Mandala */}
+          <circle cx="100" cy="66" r="46" fill="rgba(212,175,55,0.12)" stroke="url(#emeraldGold)" strokeWidth="1.2" strokeDasharray="3 3" />
+          {/* Dupatta Veil */}
+          <path d="M100 22 C60 24 44 80 36 160 L24 300 L176 300 L164 160 C156 80 140 24 100 22 Z" fill="rgba(185,28,28,0.28)" stroke="url(#emeraldGold)" strokeWidth="2" />
+          {/* Hair & Bun */}
+          <circle cx="100" cy="54" r="22" fill="#1C1917" />
+          <circle cx="100" cy="34" r="12" fill="#1C1917" stroke="url(#emeraldGold)" strokeWidth="1.5" />
+          {/* Face */}
+          <path d="M82 54 C82 40 118 40 118 54 C118 70 109 80 100 80 C91 80 82 70 82 54 Z" fill="#F3C6A5" />
+          {/* Maang Tikka */}
+          <path d="M82 48 Q100 55 118 48" stroke="url(#emeraldGold)" strokeWidth="2.2" />
+          <circle cx="100" cy="51" r="3.5" fill="#FDE68A" />
+          {/* Eyes & Smile */}
+          <path d="M89 59 Q93 62 97 59 M103 59 Q107 62 111 59" stroke="#292524" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M96 70 Q100 73 104 70" stroke="#991B1B" strokeWidth="2" strokeLinecap="round" />
+          {/* Kundan Necklace */}
+          <path d="M86 84 Q100 94 114 84" stroke="url(#emeraldGold)" strokeWidth="5" strokeLinecap="round" />
+          {/* Choli & Lehenga */}
+          <path d="M76 92 L124 92 L130 135 L70 135 Z" fill="url(#crimsonSilk)" stroke="url(#emeraldGold)" strokeWidth="1.8" />
+          <path d="M74 142 L126 142 C148 195 168 250 178 304 L22 304 C32 250 52 195 74 142 Z" fill="url(#crimsonSilk)" stroke="url(#emeraldGold)" strokeWidth="2.4" />
+          {/* Zardozi Panels */}
+          <line x1="88" y1="144" x2="58" y2="302" stroke="url(#emeraldGold)" strokeWidth="1.2" strokeOpacity="0.7" />
+          <line x1="100" y1="144" x2="100" y2="302" stroke="url(#emeraldGold)" strokeWidth="1.2" strokeOpacity="0.7" />
+          <line x1="112" y1="144" x2="142" y2="302" stroke="url(#emeraldGold)" strokeWidth="1.2" strokeOpacity="0.7" />
+          <path d="M25 280 Q100 292 175 280 L178 304 L22 304 Z" fill="rgba(212,175,55,0.32)" stroke="url(#emeraldGold)" strokeWidth="1.8" />
+        </svg>
+      );
+    };
+
+    const RoyalGroomCharacter = ({ customPng, className = "h-36 sm:h-44" }) => {
+      const [failed, setFailed] = useState(false);
+      if (customPng && !failed) {
+        return (
+          <img
+            src={customPng}
+            alt="Groom Aarav Rajput"
+            onError={() => setFailed(true)}
+            className={`object-contain select-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] ${className}`}
+          />
+        );
+      }
+      return (
+        <svg viewBox="0 0 200 320" fill="none" className={`select-none drop-shadow-[0_14px_24px_rgba(0,0,0,0.65)] ${className}`} role="img" aria-label="Illustrated Groom Aarav">
+          <defs>
+            <linearGradient id="groomGold2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FDE68A" />
+              <stop offset="50%" stopColor="#D4AF37" />
+              <stop offset="100%" stopColor="#926F1E" />
+            </linearGradient>
+            <linearGradient id="ivoryCoat" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#FFFBEB" />
+              <stop offset="70%" stopColor="#F5E6C8" />
+              <stop offset="100%" stopColor="#D6C098" />
+            </linearGradient>
+          </defs>
+          {/* Halo Mandala */}
+          <circle cx="100" cy="66" r="46" fill="rgba(212,175,55,0.12)" stroke="url(#groomGold2)" strokeWidth="1.2" strokeDasharray="3 3" />
+          {/* Royal Safa Turban */}
+          <path d="M74 48 C70 26 90 16 106 20 C124 22 134 32 128 48 C118 40 84 40 74 48 Z" fill="#881337" stroke="url(#groomGold2)" strokeWidth="2" />
+          <circle cx="108" cy="28" r="4.5" fill="#FDE68A" />
+          {/* Face */}
+          <path d="M80 48 C80 38 120 38 120 48 C120 66 111 76 100 76 C89 76 80 66 80 48 Z" fill="#E6B897" />
+          <path d="M88 53 Q93 51 97 53 M103 53 Q107 51 112 53" stroke="#1C1917" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M91 65 Q100 62 109 65" stroke="#292524" strokeWidth="2" strokeLinecap="round" />
+          {/* Sherwani */}
+          <path d="M68 88 L132 88 L142 256 L58 256 Z" fill="url(#ivoryCoat)" stroke="url(#groomGold2)" strokeWidth="2.2" />
+          {/* Emerald Mala */}
+          <path d="M84 90 Q100 118 116 90" stroke="#047857" strokeWidth="3" strokeDasharray="3 2" fill="none" />
+          <path d="M80 93 Q100 128 120 93" stroke="url(#groomGold2)" strokeWidth="2" strokeDasharray="2 3" fill="none" />
+          {/* Maroon Velvet Stole */}
+          <path d="M68 88 L88 88 C84 145 110 180 138 210 L132 232 C98 200 70 158 68 88 Z" fill="#881337" stroke="url(#groomGold2)" strokeWidth="1.8" />
+          {/* Churidar & Mojari */}
+          <rect x="80" y="256" width="14" height="42" rx="5" fill="#F5E6C8" stroke="url(#groomGold2)" strokeWidth="1" />
+          <rect x="106" y="256" width="14" height="42" rx="5" fill="#F5E6C8" stroke="url(#groomGold2)" strokeWidth="1" />
+        </svg>
+      );
+    };
+
+    // ============================================================================
+    // FLOATING AMBIENT FIREFLIES + LIVE CELEBRATION PETAL BURST OVERLAY
+    // ============================================================================
+    const RoyalAtmosphere = ({ bursts }) => {
+      const fireflies = useMemo(
+        () => [
+          { id: 1, left: '10%', size: 5, duration: '11s', delay: '0s' },
+          { id: 2, left: '24%', size: 7, duration: '14s', delay: '2s' },
+          { id: 3, left: '42%', size: 4, duration: '10s', delay: '4s' },
+          { id: 4, left: '60%', size: 6, duration: '13s', delay: '1s' },
+          { id: 5, left: '78%', size: 5, duration: '12s', delay: '3s' },
+          { id: 6, left: '90%', size: 7, duration: '15s', delay: '0.5s' }
+        ],
+        []
+      );
+
+      return (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden z-30" aria-hidden="true">
+          {fireflies.map((f) => (
+            <div
+              key={f.id}
+              style={{
+                left: f.left,
+                width: `${f.size}px`,
+                height: `${f.size}px`,
+                animationDuration: f.duration,
+                animationDelay: f.delay
+              }}
+              className="firefly-particle absolute bottom-0 rounded-full bg-[#FDE68A] shadow-[0_0_12px_#E5C158]"
+            />
+          ))}
+
+          {/* Interactive Burst Petals triggered by user actions */}
+          {bursts.map((b) => (
+            <div
+              key={b.id}
+              style={{
+                left: '50%',
+                top: '55%',
+                '--tx': b.tx,
+                '--ty': b.ty,
+                '--rot': b.rot
+              }}
+              className={`petal-burst-item absolute w-3.5 h-3.5 rounded-tl-full rounded-br-full ${b.color} shadow-md`}
+            />
+          ))}
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // PERSISTENT MUSIC SYNTH + MP3 PLAYER (Supports Auto-Start on Seal Break)
+    // ============================================================================
+    const RoyalSoundController = ({ isPlaying, onTogglePlay, customAudioUrl }) => {
+      const [isMuted, setIsMuted] = useState(false);
+      const audioElRef = useRef(null);
+      const audioCtxRef = useRef(null);
+      const synthTimerRef = useRef(null);
+      const gainRef = useRef(null);
+      const [mp3Failed, setMp3Failed] = useState(false);
+
+      const stopSynth = useCallback(() => {
+        if (synthTimerRef.current) {
+          clearInterval(synthTimerRef.current);
+          synthTimerRef.current = null;
+        }
+        if (audioCtxRef.current && audioCtxRef.current.state === 'running') {
+          audioCtxRef.current.suspend().catch(() => {});
+        }
+      }, []);
+
+      const startSynth = useCallback(() => {
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          if (!audioCtxRef.current) {
+            const ctx = new AudioCtx();
+            const master = ctx.createGain();
+            master.gain.value = isMuted ? 0 : 0.14;
+            master.connect(ctx.destination);
+            audioCtxRef.current = ctx;
+            gainRef.current = master;
+          }
+          const ctx = audioCtxRef.current;
+          if (ctx.state === 'suspended') ctx.resume();
+          if (synthTimerRef.current) clearInterval(synthTimerRef.current);
+
+          // Royal Yaman / Evening Raga pentatonic notes
+          const notes = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33];
+          let step = 0;
+
+          const playPluck = () => {
+            if (!audioCtxRef.current || audioCtxRef.current.state !== 'running') return;
+            const now = ctx.currentTime;
+            const freq = notes[(step * 2 + (step % 3)) % notes.length];
+            const osc = ctx.createOscillator();
+            const noteGain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            noteGain.gain.setValueAtTime(0.001, now);
+            noteGain.gain.linearRampToValueAtTime(0.28, now + 0.05);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+            osc.connect(noteGain);
+            noteGain.connect(gainRef.current);
+            osc.start(now);
+            osc.stop(now + 1.55);
+            step++;
+          };
+
+          playPluck();
+          synthTimerRef.current = setInterval(playPluck, 880);
+        } catch (err) {}
+      }, [isMuted]);
+
+      useEffect(() => {
+        if (!isPlaying) {
+          if (audioElRef.current) audioElRef.current.pause();
+          stopSynth();
+          return;
+        }
+
+        if (customAudioUrl && !mp3Failed && audioElRef.current) {
+          audioElRef.current
+            .play()
+            .catch(() => {
+              setMp3Failed(true);
+              startSynth();
+            });
+        } else {
+          startSynth();
+        }
+
+        return () => stopSynth();
+      }, [isPlaying, customAudioUrl, mp3Failed, startSynth, stopSynth]);
+
+      useEffect(() => {
+        if (audioElRef.current) audioElRef.current.muted = isMuted;
+        if (gainRef.current && audioCtxRef.current) {
+          gainRef.current.gain.setValueAtTime(isMuted ? 0 : 0.14, audioCtxRef.current.currentTime);
+        }
+      }, [isMuted]);
+
+      return (
+        <div className="flex items-center gap-1.5">
+          {customAudioUrl && (
+            <audio
+              ref={audioElRef}
+              src={customAudioUrl}
+              loop
+              onError={() => setMp3Failed(true)}
+            />
+          )}
+          <button
+            onClick={onTogglePlay}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#07261F]/90 border border-[#E5C158]/60 text-[#FFFDF9] hover:border-[#E5C158] transition shadow-lg"
+            title={isPlaying ? 'Pause Royal Music' : 'Play Royal Music'}
+          >
+            <span
+              className={`w-5 h-5 rounded-full bg-gradient-to-tr from-[#B38728] to-[#FBF5B7] text-[#041612] flex items-center justify-center ${
+                isPlaying ? 'animate-spin' : ''
+              }`}
+              style={{ animationDuration: '5s' }}
+            >
+              {isPlaying ? <PauseIcon className="w-3 h-3" /> : <PlayIcon className="w-3 h-3 ml-0.5" />}
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#E5C158] font-semibold">
+              {isPlaying ? 'Sound On' : 'Music'}
+            </span>
+          </button>
+          {isPlaying && (
+            <button
+              onClick={() => setIsMuted((m) => !m)}
+              className="p-1.5 rounded-full bg-[#07261F]/90 border border-[#E5C158]/40 text-[#E5C158]"
+              aria-label="Mute or Unmute"
+            >
+              {isMuted ? <VolumeXIcon className="w-3.5 h-3.5" /> : <Volume2Icon className="w-3.5 h-3.5" />}
+            </button>
+          )}
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // CARD 01 — INTERACTIVE ROYAL WAX SEAL & ENVELOPE UNSEALING EXPERIENCE
+    // ============================================================================
+    const Card01EnvelopeSeal = ({ config, onUnsealComplete, onTriggerBurst }) => {
+      const [sealStage, setSealStage] = useState('sealed'); // 'sealed' | 'unsealing' | 'rising'
+
+      const handleBreakSeal = () => {
+        if (sealStage !== 'sealed') return;
+        onTriggerBurst();
+        setSealStage('unsealing');
+        setTimeout(() => {
+          setSealStage('rising');
+        }, 480);
+        setTimeout(() => {
+          onUnsealComplete();
+        }, 1450);
+      };
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between items-center text-center px-6 py-6 sm:px-8 sm:py-7 overflow-hidden">
+          {/* Top Royal Header */}
+          <div className="relative z-20 space-y-1">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#092E26] border border-[#E5C158]/50 text-[10px] uppercase tracking-[0.22em] text-[#E5C158]">
+              <SparklesIcon className="w-3 h-3" />
+              <span>Shree Ganeshaya Namah</span>
+              <SparklesIcon className="w-3 h-3" />
+            </div>
+            <p className="text-[11px] uppercase tracking-[0.26em] text-[#D1FAE5]/80 pt-1">
+              A Royal Celebration
+            </p>
+          </div>
+
+          {/* Interactive 3D Envelope & Rising Letter Stage */}
+          <div className="relative z-20 w-full max-w-[335px] sm:max-w-[360px] my-auto flex flex-col items-center">
+            {/* The Rising Inner Gold-Foil Invitation Card */}
+            <div
+              className={`relative w-[92%] rounded-2xl bg-gradient-to-b from-[#FFFDF9] via-[#FDF8EC] to-[#F5E6C8] text-[#041612] border-2 border-[#D4AF37] p-4 sm:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.8)] transition-all duration-700 ${
+                sealStage === 'rising'
+                  ? '-translate-y-6 scale-105 shadow-[0_25px_65px_rgba(229,193,88,0.45)]'
+                  : 'translate-y-3 scale-95 opacity-95'
+              }`}
+            >
+              <div className="border border-[#B38728]/40 rounded-xl p-3 sm:p-4 flex flex-col items-center">
+                <span className="text-[9px] uppercase tracking-[0.28em] text-[#881337] font-bold">
+                  Royal Wedding Invitation
+                </span>
+                <h1 className="royal-display text-2xl sm:text-3xl font-bold text-[#041612] mt-1 tracking-wide">
+                  {config.couple.brideShort} <span className="text-[#B38728]">&amp;</span> {config.couple.groomShort}
+                </h1>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#064E3B] font-bold mt-1">
+                  {config.weddingDateDisplay}
+                </p>
+                <p className="text-[10px] text-[#334155] mt-0.5">
+                  {config.venue.shortCity}
+                </p>
+
+                {/* Bride & Groom Characters Standing Inside the Rising Card */}
+                <div className="flex items-end justify-center gap-2 mt-2">
+                  <RoyalBrideCharacter customPng={config.assets.bridePng} className="h-28 sm:h-32 w-auto" />
+                  <RoyalGroomCharacter customPng={config.assets.groomPng} className="h-28 sm:h-32 w-auto" />
+                </div>
+              </div>
+            </div>
+
+            {/* Front Emerald Velvet Envelope Pocket & Wax Seal */}
+            <div className="relative -mt-12 w-full rounded-2xl bg-gradient-to-b from-[#0A362B] to-[#051F19] border-2 border-[#E5C158] pt-8 pb-5 px-4 shadow-2xl overflow-hidden">
+              {/* Envelope Diagonal Gold Trim Lines */}
+              <svg viewBox="0 0 360 120" className="absolute inset-0 w-full h-full pointer-events-none opacity-45" preserveAspectRatio="none">
+                <path d="M0 0 L180 68 L360 0" stroke="#E5C158" strokeWidth="2" fill="rgba(4,22,18,0.5)" />
+                <path d="M0 120 L140 55 M360 120 L220 55" stroke="#E5C158" strokeWidth="1" strokeDasharray="4 4" />
+              </svg>
+
+              {/* Interactive Royal Gold Wax Seal Button */}
+              <div className="relative z-20 flex flex-col items-center">
+                <button
+                  onClick={handleBreakSeal}
+                  aria-label="OPEN YOUR INVITATION"
+                  className={`wax-seal-glow group relative w-20 h-20 sm:w-22 sm:h-22 rounded-full bg-gradient-to-br from-[#FBF5B7] via-[#D4AF37] to-[#8A6415] border-4 border-[#FFFBEB] flex flex-col items-center justify-center text-[#041612] cursor-pointer transition-all duration-500 ${
+                    sealStage !== 'sealed' ? 'scale-125 opacity-0 pointer-events-none' : 'hover:scale-105 active:scale-95'
+                  }`}
+                >
+                  <div className="w-16 h-16 rounded-full border border-[#041612]/40 flex flex-col items-center justify-center">
+                    <span className="royal-display text-xs sm:text-sm font-black tracking-tighter leading-none">
+                      {config.couple.monogram}
+                    </span>
+                    <span className="text-[7px] uppercase tracking-[0.2em] font-extrabold mt-1 text-[#4C0519]">
+                      TAP SEAL
+                    </span>
+                  </div>
+                </button>
+
+                <p className="text-[11px] text-[#FDE68A] font-semibold tracking-[0.18em] uppercase mt-3">
+                  {sealStage === 'sealed'
+                    ? 'Tap the Royal Wax Seal to Unseal'
+                    : 'Unsealing Royal Invitation...'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Explicit CTA Button */}
+          <div className="relative z-20 w-full max-w-[300px]">
+            <button
+              onClick={handleBreakSeal}
+              className="gold-shimmer relative overflow-hidden w-full py-3 px-6 rounded-full bg-gradient-to-r from-[#B38728] via-[#FBF5B7] to-[#B38728] text-[#041612] font-extrabold text-xs uppercase tracking-[0.2em] shadow-[0_10px_30px_rgba(229,193,88,0.4)] hover:brightness-105 active:scale-95 transition flex items-center justify-center gap-2"
+            >
+              <SparklesIcon className="w-4 h-4" />
+              <span>OPEN YOUR INVITATION</span>
+              <ChevronRightIcon className="w-4 h-4" />
+            </button>
+          </div>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // CARD 02 — THE COUPLE + INTERACTIVE STORY SWITCHER & BLESSING SHOWER
+    // ============================================================================
+    const Card02Couple = ({ config, onOpenLightbox, onTriggerBurst, blessingsCount, onAddBlessing }) => {
+      const [activeTab, setActiveTab] = useState('together'); // 'together' | 'bride' | 'groom'
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between items-center text-center px-6 py-5 sm:px-8 sm:py-6 overflow-y-auto no-scrollbar">
+          {/* Header */}
+          <div className="space-y-0.5">
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#E5C158] font-semibold block">
+              Chapter 02 • The Royal Couple
+            </span>
+            <h2 className="royal-serif text-xl sm:text-2xl italic text-[#FFFDF9]">
+              &ldquo;{config.couple.tagline}&rdquo;
+            </h2>
+          </div>
+
+          {/* Interactive Story Pill Switcher */}
+          <div className="inline-flex p-1 rounded-full bg-[#03110E] border border-[#E5C158]/40 text-[11px]">
+            {[
+              { id: 'together', label: 'Our Union' },
+              { id: 'bride', label: `Bride: ${config.couple.brideShort}` },
+              { id: 'groom', label: `Groom: ${config.couple.groomShort}` }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 py-1 rounded-full font-semibold transition ${
+                  activeTab === tab.id
+                    ? 'bg-[#E5C158] text-[#041612] shadow'
+                    : 'text-[#D1FAE5]/75 hover:text-[#FFFDF9]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Center Interactive Portrait / Character Frame */}
+          <div className="my-1 flex flex-col items-center">
+            {activeTab === 'together' && (
+              <button
+                onClick={() =>
+                  onOpenLightbox({
+                    url: config.assets.couplePortrait,
+                    fallback: config.assets.coupleFallback,
+                    title: `${config.couple.brideName} & ${config.couple.groomName}`,
+                    caption: config.couple.invitationMessage
+                  })
+                }
+                className="group relative p-1.5 rounded-t-full rounded-b-3xl bg-gradient-to-b from-[#FBF5B7] via-[#D4AF37] to-[#8A6415] shadow-2xl"
+              >
+                <div className="relative w-40 h-44 sm:w-44 sm:h-48 rounded-t-full rounded-b-2xl overflow-hidden bg-[#041612]">
+                  <SmartImage
+                    src={config.assets.couplePortrait}
+                    fallback={config.assets.coupleFallback}
+                    alt="Ananya & Aarav Portrait"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-2">
+                    <span className="text-[9px] uppercase tracking-widest text-[#FDE68A]">
+                      Tap Portrait to Enlarge
+                    </span>
+                  </div>
+                </div>
+              </button>
+            )}
+
+            {activeTab === 'bride' && (
+              <div className="p-4 rounded-3xl bg-[#092E26]/90 border border-[#E5C158]/60 flex flex-col items-center max-w-xs animate-fadeIn">
+                <RoyalBrideCharacter customPng={config.assets.bridePng} className="h-36 w-auto" />
+                <h3 className="royal-serif text-xl font-bold text-[#FDE68A] mt-2">
+                  {config.couple.brideName}
+                </h3>
+                <p className="text-xs text-[#FFFDF9]/90 mt-1 leading-relaxed">
+                  {config.couple.brideBio}
+                </p>
+              </div>
+            )}
+
+            {activeTab === 'groom' && (
+              <div className="p-4 rounded-3xl bg-[#092E26]/90 border border-[#E5C158]/60 flex flex-col items-center max-w-xs animate-fadeIn">
+                <RoyalGroomCharacter customPng={config.assets.groomPng} className="h-36 w-auto" />
+                <h3 className="royal-serif text-xl font-bold text-[#FDE68A] mt-2">
+                  {config.couple.groomName}
+                </h3>
+                <p className="text-xs text-[#FFFDF9]/90 mt-1 leading-relaxed">
+                  {config.couple.groomBio}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Names & Invitation Message */}
+          <div className="max-w-xs sm:max-w-sm space-y-1">
+            <h3 className="royal-serif text-2xl sm:text-3xl font-bold text-[#FFFDF9]">
+              {config.couple.brideName} <span className="text-[#E5C158] italic">&amp;</span> {config.couple.groomName}
+            </h3>
+            <p className="text-xs text-[#D1FAE5]/90 leading-relaxed">
+              {config.couple.invitationMessage}
+            </p>
+          </div>
+
+          {/* Interactive "Shower Floral Blessings" Button */}
+          <div className="w-full max-w-xs pt-1">
+            <button
+              onClick={() => {
+                onAddBlessing();
+                onTriggerBurst();
+              }}
+              className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#881337] via-[#9F1239] to-[#881337] border border-[#FDE68A] text-[#FFFDF9] text-xs font-bold uppercase tracking-[0.15em] shadow-lg active:scale-95 transition flex items-center justify-center gap-2"
+            >
+              <HeartIcon className="w-4 h-4 fill-[#FDE68A] text-[#FDE68A]" />
+              <span>Shower Floral Blessings ({blessingsCount})</span>
+            </button>
+          </div>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // CARD 03 — OUR MEMORIES (3D Interactive Polaroid Deck + Editorial Grid Toggle)
+    // ============================================================================
+    const Card03PolaroidGallery = ({ config, onSelectPhotoIndex }) => {
+      const [viewMode, setViewMode] = useState('deck'); // 'deck' | 'grid'
+      const [activeDeckIndex, setActiveDeckIndex] = useState(0);
+
+      const nextPolaroid = () => {
+        setActiveDeckIndex((prev) => (prev + 1) % config.gallery.length);
+      };
+
+      const activePhoto = config.gallery[activeDeckIndex];
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between bg-[#FFFDF9] text-[#041612] px-5 py-5 sm:px-7 sm:py-6 overflow-y-auto no-scrollbar">
+          {/* Ornamental Inner Frame */}
+          <div className="pointer-events-none absolute inset-2.5 rounded-2xl border border-[#D4AF37]/60 z-10" />
+
+          {/* Top Bar with Mode Switcher */}
+          <div className="relative z-20 flex items-center justify-between gap-2">
+            <div className="text-left">
+              <span className="text-[10px] uppercase tracking-[0.24em] text-[#064E3B] font-bold block">
+                Chapter 03 • Pre-Wedding
+              </span>
+              <h2 className="royal-serif text-2xl sm:text-3xl font-bold text-[#041612]">
+                Our Memories
+              </h2>
+            </div>
+
+            <div className="inline-flex rounded-full bg-[#041612] p-1 text-white">
+              <button
+                onClick={() => setViewMode('deck')}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold transition ${
+                  viewMode === 'deck' ? 'bg-[#E5C158] text-[#041612]' : 'text-[#FFFDF9]/75'
+                }`}
+              >
+                <LayersIcon className="w-3 h-3" />
+                <span>3D Deck</span>
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold transition ${
+                  viewMode === 'grid' ? 'bg-[#E5C158] text-[#041612]' : 'text-[#FFFDF9]/75'
+                }`}
+              >
+                <GridIcon className="w-3 h-3" />
+                <span>All 6</span>
+              </button>
+            </div>
+          </div>
+
+          {/* VIEW MODE 1: INTERACTIVE 3D POLAROID STACK */}
+          {viewMode === 'deck' ? (
+            <div className="relative z-20 my-auto flex flex-col items-center">
+              <div className="relative w-64 sm:w-72 h-72 sm:h-80 flex items-center justify-center">
+                {/* Background stacked card shadows */}
+                <div className="absolute inset-0 rounded-2xl bg-[#F5E6C8] border-2 border-[#D4AF37] rotate-6 scale-95 shadow-md" />
+                <div className="absolute inset-0 rounded-2xl bg-[#FDF8EC] border-2 border-[#D4AF37] -rotate-3 scale-95 shadow-md" />
+
+                {/* Active Top Polaroid Card */}
+                <div
+                  key={activePhoto.id}
+                  onClick={() => onSelectPhotoIndex(activeDeckIndex)}
+                  className="stage-transition relative w-full h-full rounded-2xl bg-white border-2 border-[#D4AF37] p-3 shadow-2xl flex flex-col justify-between cursor-pointer group"
+                >
+                  <div className="relative w-full h-48 sm:h-52 rounded-xl overflow-hidden bg-[#041612]">
+                    <SmartImage
+                      src={activePhoto.url}
+                      fallback={activePhoto.fallback}
+                      alt={activePhoto.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/70 text-[#FDE68A] text-[10px] font-bold">
+                      0{activeDeckIndex + 1} / 0{config.gallery.length}
+                    </span>
+                  </div>
+                  <div className="text-left pt-2">
+                    <h3 className="royal-serif text-lg font-bold text-[#041612] leading-tight">
+                      {activePhoto.title}
+                    </h3>
+                    <p className="text-[11px] text-[#475569] line-clamp-1 mt-0.5">
+                      {activePhoto.caption}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 mt-4">
+                <button
+                  onClick={nextPolaroid}
+                  className="px-5 py-2 rounded-full bg-[#041612] text-[#FDE68A] text-xs font-bold uppercase tracking-widest shadow-lg hover:bg-[#092E26] active:scale-95 transition"
+                >
+                  Shuffle Next Photo ↻
+                </button>
+                <button
+                  onClick={() => onSelectPhotoIndex(activeDeckIndex)}
+                  className="px-4 py-2 rounded-full border border-[#041612] text-[#041612] text-xs font-bold uppercase tracking-wider hover:bg-[#F5E6C8] transition"
+                >
+                  Full Screen
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* VIEW MODE 2: 6-PHOTO ASYMMETRIC EDITORIAL GRID */
+            <div className="relative z-20 grid grid-cols-2 sm:grid-cols-3 gap-2 my-2">
+              {config.gallery.map((item, idx) => (
+                <button
+                  key={item.id}
+                  onClick={() => onSelectPhotoIndex(idx)}
+                  className="group relative h-28 sm:h-32 rounded-xl overflow-hidden border-2 border-[#D4AF37] bg-[#041612] shadow text-left"
+                >
+                  <SmartImage
+                    src={item.url}
+                    fallback={item.fallback}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute bottom-1.5 left-2 right-2">
+                    <span className="text-[8px] text-[#FDE68A] uppercase tracking-widest block">
+                      0{idx + 1}
+                    </span>
+                    <p className="royal-serif text-xs font-bold text-white truncate">
+                      {item.title}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Footer Note */}
+          <p className="relative z-20 text-center text-[11px] text-[#064E3B] font-medium italic">
+            Tap any memory to open the full-screen gallery viewer
+          </p>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // CARD 04 — INTERACTIVE GOLD FOIL SCRATCH-TO-REVEAL SAVE THE DATE & COUNTDOWN
+    // ============================================================================
+    const Card04ScratchSaveTheDate = ({ config, onTriggerBurst }) => {
+      const [isRevealed, setIsRevealed] = useState(false);
+      const [scratchProgress, setScratchProgress] = useState(0);
+      const [icsSaved, setIcsSaved] = useState(false);
+      const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0, completed: false });
+
+      useEffect(() => {
+        const target = new Date(config.weddingDateISO).getTime();
+        const tick = () => {
+          const diff = target - Date.now();
+          if (isNaN(target) || diff <= 0) {
+            setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, completed: true });
+            return;
+          }
+          setTimeLeft({
+            days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+            minutes: Math.floor((diff / 1000 / 60) % 60),
+            seconds: Math.floor((diff / 1000) % 60),
+            completed: false
+          });
+        };
+        tick();
+        const timer = setInterval(tick, 1000);
+        return () => clearInterval(timer);
+      }, [config.weddingDateISO]);
+
+      const handleScratchMove = () => {
+        if (isRevealed) return;
+        setScratchProgress((prev) => {
+          const next = prev + 18;
+          if (next >= 100) {
+            setIsRevealed(true);
+            onTriggerBurst();
+            return 100;
+          }
+          return next;
+        });
+      };
+
+      const handleInstantReveal = () => {
+        if (!isRevealed) {
+          setScratchProgress(100);
+          setIsRevealed(true);
+          onTriggerBurst();
+        }
+      };
+
+      const handleDownloadICS = () => {
+        const icsLines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'BEGIN:VEVENT',
+          'DTSTART:20270215T133000Z',
+          'DTEND:20270215T183000Z',
+          `SUMMARY:Wedding of ${config.couple.brideName} & ${config.couple.groomName}`,
+          `DESCRIPTION:${config.couple.invitationMessage}`,
+          `LOCATION:${config.venue.name}`,
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ];
+        const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${config.couple.brideShort}-${config.couple.groomShort}-Wedding.ics`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setIcsSaved(true);
+        setTimeout(() => setIcsSaved(false), 3000);
+      };
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between items-center text-center px-6 py-6 sm:px-8 sm:py-7 overflow-y-auto no-scrollbar">
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#E5C158] block">
+              Chapter 04 • Auspicious Muhurtham
+            </span>
+            <h2 className="royal-serif text-3xl sm:text-4xl font-bold text-[#FFFDF9] mt-0.5">
+              Save the Date
+            </h2>
+          </div>
+
+          {/* Interactive Gold Foil Scratch Card Box */}
+          <div className="w-full max-w-xs relative rounded-2xl overflow-hidden border-2 border-[#E5C158] shadow-2xl bg-[#07261F] p-4">
+            <div className="space-y-1">
+              <span className="text-[10px] uppercase tracking-[0.24em] text-[#D1FAE5]">
+                The Sacred Wedding Date
+              </span>
+              <p className="royal-display text-xl sm:text-2xl font-bold text-[#FDE68A]">
+                {config.weddingDateDisplay}
+              </p>
+              <p className="text-xs text-[#FFFDF9]/85">{config.venue.name}</p>
+            </div>
+
+            {/* Interactive Gold Foil Overlay */}
+            {!isRevealed && (
+              <div
+                onMouseMove={handleScratchMove}
+                onTouchMove={handleScratchMove}
+                onClick={handleInstantReveal}
+                style={{ opacity: Math.max(0.15, 1 - scratchProgress / 110) }}
+                className="gold-shimmer absolute inset-0 bg-gradient-to-r from-[#926F1E] via-[#FBF5B7] to-[#B38728] text-[#041612] flex flex-col items-center justify-center p-3 cursor-pointer select-none transition-opacity duration-300"
+              >
+                <SparklesIcon className="w-6 h-6 text-[#4C0519] animate-bounce" />
+                <p className="royal-display text-sm font-black uppercase tracking-wider mt-1">
+                  Scratch or Tap Gold Foil
+                </p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#041612]/80 mt-0.5">
+                  To Reveal the Auspicious Muhurtham ({scratchProgress}%)
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Live Countdown Numerals */}
+          <div className="w-full max-w-sm">
+            {timeLeft.completed ? (
+              <div className="p-3 rounded-2xl bg-[#092E26] border border-[#E5C158] text-[#FDE68A] royal-serif text-lg">
+                Happily Married! Thank you for your blessings.
+              </div>
+            ) : (
+              <div className="grid grid-cols-4 gap-2 sm:gap-2.5">
+                {[
+                  { label: 'Days', value: timeLeft.days },
+                  { label: 'Hours', value: timeLeft.hours },
+                  { label: 'Mins', value: timeLeft.minutes },
+                  { label: 'Secs', value: timeLeft.seconds }
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-2xl bg-gradient-to-b from-[#092E26] to-[#03130F] border border-[#E5C158]/65 py-3 px-2 shadow-lg"
+                  >
+                    <span className="royal-serif text-2xl sm:text-3xl font-bold text-[#FDE68A] tabular-nums block leading-none">
+                      {String(item.value).padStart(2, '0')}
+                    </span>
+                    <span className="text-[9px] uppercase tracking-widest text-[#D1FAE5]/75 mt-1 block">
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Mini Royal Calendar Highlight */}
+          <div className="w-full max-w-xs rounded-2xl bg-[#03130F]/90 border border-[#E5C158]/35 px-4 py-2.5 flex items-center justify-between text-xs">
+            <div className="text-left">
+              <span className="text-[10px] uppercase tracking-widest text-[#E5C158] block">
+                Celebration Window
+              </span>
+              <span className="text-[#FFFDF9] font-semibold">13 – 16 February 2027</span>
+            </div>
+            <span className="px-2.5 py-1 rounded-full bg-[#E5C158]/20 border border-[#E5C158] text-[#FDE68A] text-[10px] font-bold">
+              4 Royal Days
+            </span>
+          </div>
+
+          {/* Add to Calendar (.ICS) */}
+          <button
+            onClick={handleDownloadICS}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#B38728] via-[#FBF5B7] to-[#B38728] text-[#041612] font-extrabold text-xs uppercase tracking-[0.16em] shadow-xl hover:brightness-105 active:scale-95 transition"
+          >
+            {icsSaved ? <CheckIcon className="w-4 h-4" /> : <CalendarIcon className="w-4 h-4" />}
+            <span>{icsSaved ? 'Saved to Calendar (.ICS)' : 'Add to Calendar (.ICS)'}</span>
+          </button>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // CARD 05 — ROYAL PASSPORT FESTIVITIES & DRESS CODE PALETTE EXPLORER
+    // ============================================================================
+    const Card05RoyalItinerary = ({ config, activeEventIndex, onSelectEventIndex }) => {
+      const activeEvent = config.events[activeEventIndex] || config.events[0];
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between px-5 py-5 sm:px-7 sm:py-6 overflow-y-auto no-scrollbar">
+          {/* Header */}
+          <div className="text-center">
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#E5C158] block">
+              Chapter 05 • Celebration 0{activeEventIndex + 1} of 0{config.events.length}
+            </span>
+            <h2 className="royal-serif text-2xl sm:text-3xl font-bold text-[#FFFDF9] mt-0.5">
+              Wedding Festivities
+            </h2>
+          </div>
+
+          {/* Horizontal Interactive Event Selector Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+            {config.events.map((ev, index) => {
+              const active = index === activeEventIndex;
+              const isUnlocked = index <= activeEventIndex;
+              return (
+                <button
+                  key={ev.id}
+                  onClick={() => onSelectEventIndex(index)}
+                  className={`flex-shrink-0 px-3.5 py-2 rounded-2xl text-xs font-bold border transition-all ${
+                    active
+                      ? 'bg-gradient-to-r from-[#B38728] to-[#FBF5B7] text-[#041612] border-[#FFFBEB] shadow-lg scale-105'
+                      : isUnlocked
+                      ? 'bg-[#07261F]/95 text-[#FDE68A] border-[#E5C158]/60 hover:border-[#E5C158]'
+                      : 'bg-[#07261F]/50 text-[#D1FAE5]/50 border-[#E5C158]/20 hover:border-[#E5C158]/40'
+                  }`}
+                >
+                  <span className="text-[9px] uppercase tracking-wider block opacity-75">
+                    0{index + 1} {isUnlocked ? '• Revealed' : ''}
+                  </span>
+                  <span>{ev.title}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Royal Boarding Pass / Invitation Ticket View */}
+          <div
+            key={activeEvent.id}
+            className="stage-transition rounded-3xl bg-gradient-to-b from-[#092E26] to-[#041914] border-2 border-[#E5C158] p-4 sm:p-5 shadow-2xl space-y-3 text-left relative overflow-hidden"
+          >
+            <div className="flex items-start justify-between gap-2 border-b border-[#E5C158]/30 pb-2.5">
+              <div>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-[#E5C158] font-bold">
+                  {activeEvent.dayTag}
+                </span>
+                <h3 className="royal-serif text-2xl sm:text-3xl font-bold text-[#FFFDF9]">
+                  {activeEvent.title}
+                </h3>
+                <p className="text-xs text-[#FDE68A] italic">{activeEvent.subtitle}</p>
+              </div>
+              <div className="text-right bg-[#03130F] px-3 py-1.5 rounded-xl border border-[#E5C158]/50">
+                <span className="text-[10px] text-[#E5C158] uppercase block font-bold">
+                  {activeEvent.date}
+                </span>
+                <span className="text-xs text-[#FFFDF9] font-extrabold">{activeEvent.time}</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-[#FFFDF9]/90 leading-relaxed">
+              {activeEvent.description}
+            </p>
+
+            {/* Dress Code Swatch Palette */}
+            <div className="p-3 rounded-2xl bg-[#03130F]/90 border border-[#E5C158]/40 flex items-center justify-between gap-2">
+              <div>
+                <span className="text-[9px] uppercase tracking-widest text-[#E5C158] block font-bold">
+                  Royal Dress Code
+                </span>
+                <span className="text-xs text-[#FFFDF9] font-semibold">
+                  {activeEvent.dressCode}
+                </span>
+              </div>
+              <div className="flex items-center -space-x-1.5">
+                {activeEvent.swatch.map((hex, i) => (
+                  <span
+                    key={i}
+                    style={{ backgroundColor: hex }}
+                    className="w-6 h-6 rounded-full border-2 border-[#FFFDF9] shadow"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Venue Line */}
+            <div className="flex items-center gap-2 text-xs text-[#D1FAE5]">
+              <MapPinIcon className="w-4 h-4 text-[#E5C158] flex-shrink-0" />
+              <span className="truncate">{activeEvent.venue}</span>
+            </div>
+          </div>
+
+          {/* Step-by-Step Reveal Hint & Progress Strip at Bottom */}
+          <div className="space-y-1.5 pt-1">
+            <div className="grid grid-cols-5 gap-1 text-center">
+              {config.events.map((ev, idx) => (
+                <button
+                  key={ev.id}
+                  onClick={() => onSelectEventIndex(idx)}
+                  className={`py-1 rounded-lg text-[9px] font-semibold truncate px-1 transition ${
+                    idx === activeEventIndex
+                      ? 'bg-[#E5C158] text-[#041612] font-bold shadow'
+                      : idx < activeEventIndex
+                      ? 'bg-[#E5C158]/20 text-[#FDE68A] border border-[#E5C158]/40'
+                      : 'text-[#D1FAE5]/45 bg-[#03130F]/50'
+                  }`}
+                >
+                  {ev.title}
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-center text-[#FDE68A] uppercase tracking-[0.16em]">
+              {activeEventIndex < config.events.length - 1
+                ? `Tap Next Arrow (→) to Reveal ${config.events[activeEventIndex + 1].title} Date`
+                : 'All 5 Dates Revealed • Tap Next Arrow (→) for Venue'}
+            </p>
+          </div>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // CARD 06 — THE ROYAL VENUE & CLOSING BLESSINGS
+    // ============================================================================
+    const Card06VenueAndClosing = ({ config, onRestart }) => {
+      const [shareMsg, setShareMsg] = useState('');
+
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+        config.venue.mapsQuery || config.venue.name
+      )}`;
+
+      const handleShare = async () => {
+        const shareData = {
+          title: `${config.couple.brideShort} & ${config.couple.groomShort} — Royal Wedding Invitation`,
+          text: `${config.couple.invitationMessage} Join us on ${config.weddingDateDisplay} at ${config.venue.name}.`,
+          url: window.location.href
+        };
+        try {
+          if (navigator.share) {
+            await navigator.share(shareData);
+            setShareMsg('Invitation shared!');
+          } else {
+            copyToClipboard(window.location.href);
+            setShareMsg('Invitation link copied!');
+          }
+        } catch (err) {
+          copyToClipboard(window.location.href);
+          setShareMsg('Invitation link copied!');
+        }
+        setTimeout(() => setShareMsg(''), 3000);
+      };
+
+      return (
+        <section className="relative w-full h-full flex flex-col justify-between items-center text-center px-6 py-6 sm:px-8 sm:py-7 overflow-y-auto no-scrollbar">
+          {/* Header */}
+          <div>
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#E5C158] block">
+              Chapter 06 • Royal Destination &amp; Finale
+            </span>
+            <h2 className="royal-serif text-3xl sm:text-4xl font-bold text-[#FFFDF9] mt-0.5">
+              The Royal Venue
+            </h2>
+          </div>
+
+          {/* Architectural Palace Illustration & Destination Card */}
+          <div className="w-full max-w-xs rounded-3xl bg-gradient-to-b from-[#092E26] to-[#041914] border-2 border-[#E5C158] p-5 shadow-2xl space-y-3 my-auto">
+            {/* Golden Palace Dome SVG */}
+            <svg viewBox="0 0 280 95" className="w-full h-20 mx-auto" fill="none" aria-hidden="true">
+              <path d="M110 55 C110 28 140 14 140 8 C140 14 170 28 170 55 Z" fill="rgba(229,193,88,0.22)" stroke="#E5C158" strokeWidth="1.8" />
+              <line x1="140" y1="2" x2="140" y2="8" stroke="#E5C158" strokeWidth="2" />
+              <path d="M55 60 C55 42 72 32 72 26 C72 32 89 42 89 60 Z" fill="rgba(229,193,88,0.16)" stroke="#E5C158" strokeWidth="1.5" />
+              <path d="M191 60 C191 42 208 32 208 26 C208 32 225 42 225 60 Z" fill="rgba(229,193,88,0.16)" stroke="#E5C158" strokeWidth="1.5" />
+              <rect x="35" y="55" width="210" height="34" fill="#041612" stroke="#E5C158" strokeWidth="1.8" />
+              {[60, 100, 140, 180, 220].map((x) => (
+                <path key={x} d={`M${x - 10} 89 L${x - 10} 70 Q${x} 60 ${x + 10} 70 L${x + 10} 89`} fill="#092E26" stroke="#E5C158" strokeWidth="1.3" />
+              ))}
+              <line x1="15" y1="89" x2="265" y2="89" stroke="#E5C158" strokeWidth="2" />
+            </svg>
+
+            <div className="inline-flex items-center justify-center gap-1.5 px-3 py-0.5 rounded-full bg-[#03130F] border border-[#E5C158]/40 text-[#FDE68A]">
+              <MapPinIcon className="w-3.5 h-3.5" />
+              <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Jaipur, Rajasthan</span>
+            </div>
+
+            <h3 className="royal-serif text-xl sm:text-2xl font-bold text-[#FFFDF9] leading-snug">
+              {config.venue.name}
+            </h3>
+
+            <p className="text-xs text-[#E5C158] font-semibold tracking-wider uppercase">
+              {config.weddingDateDisplay}
+            </p>
+
+            <p className="royal-serif italic text-sm text-[#D1FAE5]/90 pt-1 leading-relaxed">
+              &ldquo;{config.couple.closingMessage}&rdquo;
+            </p>
+
+            <div className="pt-1">
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-full bg-gradient-to-r from-[#B38728] via-[#FBF5B7] to-[#B38728] text-[#041612] font-extrabold text-xs uppercase tracking-[0.16em] shadow-xl hover:brightness-105 transition"
+              >
+                <MapPinIcon className="w-4 h-4" />
+                <span>OPEN IN GOOGLE MAPS</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Share & Back to Beginning */}
+          <div className="w-full max-w-xs space-y-1.5">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={handleShare}
+                className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full bg-[#092E26] border border-[#E5C158] text-[#FFFDF9] hover:bg-[#E5C158] hover:text-[#041612] text-[10px] font-bold uppercase tracking-wider transition"
+              >
+                <Share2Icon className="w-3.5 h-3.5" />
+                <span>SHARE INVITATION</span>
+              </button>
+              <button
+                onClick={onRestart}
+                className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full bg-[#03130F] border border-[#E5C158]/60 text-[#E5C158] hover:border-[#E5C158] text-[10px] font-bold uppercase tracking-wider transition"
+              >
+                <RotateCcwIcon className="w-3.5 h-3.5" />
+                <span>BACK TO BEGINNING</span>
+              </button>
+            </div>
+            {shareMsg && <p className="text-[11px] text-[#FDE68A] font-semibold">{shareMsg}</p>}
+          </div>
+        </section>
+      );
+    };
+
+    // ============================================================================
+    // FULL-SCREEN LIGHTBOX MODAL
+    // ============================================================================
+    const LightboxModal = ({ isOpen, items, currentIndex, onClose, onPrev, onNext }) => {
+      useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e) => {
+          if (e.key === 'Escape') onClose();
+          if (e.key === 'ArrowLeft' && items.length > 1) onPrev();
+          if (e.key === 'ArrowRight' && items.length > 1) onNext();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [isOpen, items.length, onClose, onPrev, onNext]);
+
+      if (!isOpen || !items || items.length === 0) return null;
+      const active = items[currentIndex] || items[0];
+
+      return (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4">
+          <div className="w-full max-w-xl flex items-center justify-between mb-3 text-white">
+            <span className="text-xs uppercase tracking-[0.2em] text-[#E5C158]">
+              {items.length > 1 ? `Memory 0${currentIndex + 1} / 0${items.length}` : 'Royal Portrait'}
+            </span>
+            <button
+              onClick={onClose}
+              aria-label="Close Lightbox"
+              className="p-2 rounded-full bg-[#092E26] border border-[#E5C158] text-white"
+            >
+              <XIcon className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="relative w-full max-w-lg rounded-2xl overflow-hidden border-2 border-[#E5C158] bg-[#041612]">
+            <SmartImage
+              src={active.url}
+              fallback={active.fallback}
+              alt={active.title}
+              className="w-full max-h-[68vh] object-contain mx-auto"
+            />
+            {items.length > 1 && (
+              <>
+                <button
+                  onClick={onPrev}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/75 border border-[#E5C158] text-white"
+                >
+                  <ChevronLeftIcon className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={onNext}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/75 border border-[#E5C158] text-white"
+                >
+                  <ChevronRightIcon className="w-5 h-5" />
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="text-center mt-3 max-w-md">
+            <h3 className="royal-serif text-xl font-bold text-[#FDE68A]">{active.title}</h3>
+            {active.caption && <p className="text-xs text-[#D1FAE5] mt-1">{active.caption}</p>}
+          </div>
+        </div>
+      );
+    };
+
+    // ============================================================================
+    // MAIN APP ORCHESTRATOR
+    // ============================================================================
+    function App() {
+      const [currentCard, setCurrentCard] = useState(0);
+      const [eventStep, setEventStep] = useState(0);
+      const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+      const [blessingsCount, setBlessingsCount] = useState(108);
+      const [bursts, setBursts] = useState([]);
+      const [lightbox, setLightbox] = useState({ isOpen: false, items: [], currentIndex: 0 });
+
+      const touchStartX = useRef(null);
+      const touchStartY = useRef(null);
+
+      const triggerPetalBurst = useCallback(() => {
+        const colors = ['bg-[#F59E0B]', 'bg-[#FDE68A]', 'bg-[#E11D48]', 'bg-[#10B981]'];
+        const newParticles = Array.from({ length: 18 }, (_, i) => {
+          const angle = (Math.PI * 2 * i) / 18;
+          const distance = 90 + Math.random() * 110;
+          return {
+            id: `${Date.now()}-${i}-${Math.random()}`,
+            tx: `${Math.cos(angle) * distance}px`,
+            ty: `${Math.sin(angle) * distance - 40}px`,
+            rot: `${Math.floor(Math.random() * 360)}deg`,
+            color: colors[i % colors.length]
+          };
+        });
+        setBursts((prev) => [...prev, ...newParticles]);
+        setTimeout(() => {
+          setBursts((prev) => prev.slice(newParticles.length));
+        }, 1300);
+      }, []);
+
+      const goToCard = useCallback((index) => {
+        if (index < 0 || index >= CHAPTERS.length) return;
+        if (index === 4) setEventStep(0);
+        setCurrentCard(index);
+      }, []);
+
+      const nextCard = useCallback(() => {
+        // On Card 05 (index 4), reveal each of the 5 festivities one by one before advancing to Card 06
+        if (currentCard === 4 && eventStep < WEDDING_CONFIG.events.length - 1) {
+          setEventStep((s) => s + 1);
+          return;
+        }
+        if (currentCard < CHAPTERS.length - 1) {
+          const nextIdx = currentCard + 1;
+          if (nextIdx === 4) setEventStep(0);
+          setCurrentCard(nextIdx);
+        }
+      }, [currentCard, eventStep]);
+
+      const prevCard = useCallback(() => {
+        // On Card 05 (index 4), step back through revealed festivities first
+        if (currentCard === 4 && eventStep > 0) {
+          setEventStep((s) => s - 1);
+          return;
+        }
+        if (currentCard > 0) {
+          const prevIdx = currentCard - 1;
+          if (prevIdx === 4) setEventStep(WEDDING_CONFIG.events.length - 1);
+          setCurrentCard(prevIdx);
+        }
+      }, [currentCard, eventStep]);
+
+      // Desktop Keyboard Arrow Support
+      useEffect(() => {
+        const onKey = (e) => {
+          if (lightbox.isOpen) return;
+          if (e.key === 'ArrowRight') nextCard();
+          if (e.key === 'ArrowLeft') prevCard();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [nextCard, prevCard, lightbox.isOpen]);
+
+      return (
+        <div className="relative min-h-screen w-full bg-[#041612] text-[#FFFDF9] flex flex-col items-center justify-center p-2 sm:p-4 overflow-x-hidden">
+          {/* Ambient Emerald Palace Radial Spotlight */}
+          <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_top,_#0D3B2E_0%,_#041612_72%)]" />
+
+          {/* Top Bar: Progress Pill + Chapter Jump Pills + Music Controller */}
+          <header className="relative z-40 w-full max-w-[440px] flex items-center justify-between gap-2 mb-2 px-1">
+            <div className="flex items-center gap-2 bg-[#07261F]/90 border border-[#E5C158]/50 rounded-full px-3 py-1 shadow-lg">
+              <span className="text-[11px] font-extrabold tracking-[0.2em] text-[#FDE68A]">
+                0{currentCard + 1} / 0{CHAPTERS.length}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-[#D1FAE5] hidden xs:inline">
+                • {CHAPTERS[currentCard].name}
+              </span>
+            </div>
+
+            <RoyalSoundController
+              isPlaying={isPlayingMusic}
+              onTogglePlay={() => setIsPlayingMusic((p) => !p)}
+              customAudioUrl={WEDDING_CONFIG.assets.musicUrl}
+            />
+          </header>
+
+          {/* Main Interactive Stage with Floating Side Arrows */}
+          <div className="relative w-full max-w-[440px] flex items-center justify-center z-20">
+            {currentCard > 0 && (
+              <button
+                onClick={prevCard}
+                aria-label="Previous Card"
+                className="absolute left-1.5 sm:-left-5 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#07261F]/95 hover:bg-[#E5C158] text-[#E5C158] hover:text-[#041612] border-2 border-[#E5C158] flex items-center justify-center shadow-2xl transition active:scale-90"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+            )}
+
+            {currentCard < CHAPTERS.length - 1 && (
+              <button
+                onClick={nextCard}
+                aria-label="Next Card"
+                className="absolute right-1.5 sm:-right-5 top-1/2 -translate-y-1/2 z-40 h-9 px-2.5 sm:w-11 sm:h-11 sm:px-0 rounded-full bg-gradient-to-r from-[#B38728] via-[#FBF5B7] to-[#B38728] text-[#041612] border-2 border-[#FFFBEB] flex items-center justify-center gap-0.5 shadow-2xl transition active:scale-90"
+              >
+                <span className="text-[9px] font-black uppercase tracking-wider sm:hidden">Next</span>
+                <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            )}
+
+            <main
+              onTouchStart={(e) => {
+                touchStartX.current = e.touches[0].clientX;
+                touchStartY.current = e.touches[0].clientY;
+              }}
+              onTouchEnd={(e) => {
+                if (touchStartX.current === null || touchStartY.current === null) return;
+                const dx = e.changedTouches[0].clientX - touchStartX.current;
+                const dy = e.changedTouches[0].clientY - touchStartY.current;
+                if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+                  if (dx < 0) nextCard();
+                  if (dx > 0) prevCard();
+                }
+                touchStartX.current = null;
+                touchStartY.current = null;
+              }}
+              className="relative w-full h-[80vh] min-h-[580px] max-h-[750px] rounded-[30px] bg-gradient-to-b from-[#082B22] via-[#051C16] to-[#03110D] border-2 border-[#E5C158] shadow-[0_25px_70px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col"
+            >
+              {/* Corner Royal Jaali Filigree Accents */}
+              <div className="pointer-events-none absolute top-2.5 left-2.5 w-8 h-8 border-t-2 border-l-2 border-[#E5C158]/60 rounded-tl-xl z-20" />
+              <div className="pointer-events-none absolute top-2.5 right-2.5 w-8 h-8 border-t-2 border-r-2 border-[#E5C158]/60 rounded-tr-xl z-20" />
+              <div className="pointer-events-none absolute bottom-2.5 left-2.5 w-8 h-8 border-b-2 border-l-2 border-[#E5C158]/60 rounded-bl-xl z-20" />
+              <div className="pointer-events-none absolute bottom-2.5 right-2.5 w-8 h-8 border-b-2 border-r-2 border-[#E5C158]/60 rounded-br-xl z-20" />
+
+              <RoyalAtmosphere bursts={bursts} />
+
+              <div key={currentCard} className="stage-transition w-full h-full">
+                {currentCard === 0 && (
+                  <Card01EnvelopeSeal
+                    config={WEDDING_CONFIG}
+                    onTriggerBurst={triggerPetalBurst}
+                    onUnsealComplete={() => {
+                      setIsPlayingMusic(true);
+                      goToCard(1);
+                    }}
+                  />
+                )}
+
+                {currentCard === 1 && (
+                  <Card02Couple
+                    config={WEDDING_CONFIG}
+                    blessingsCount={blessingsCount}
+                    onAddBlessing={() => setBlessingsCount((c) => c + 1)}
+                    onTriggerBurst={triggerPetalBurst}
+                    onOpenLightbox={(photo) =>
+                      setLightbox({ isOpen: true, items: [photo], currentIndex: 0 })
+                    }
+                  />
+                )}
+
+                {currentCard === 2 && (
+                  <Card03PolaroidGallery
+                    config={WEDDING_CONFIG}
+                    onSelectPhotoIndex={(idx) =>
+                      setLightbox({ isOpen: true, items: WEDDING_CONFIG.gallery, currentIndex: idx })
+                    }
+                  />
+                )}
+
+                {currentCard === 3 && (
+                  <Card04ScratchSaveTheDate
+                    config={WEDDING_CONFIG}
+                    onTriggerBurst={triggerPetalBurst}
+                  />
+                )}
+
+                {currentCard === 4 && (
+                  <Card05RoyalItinerary
+                    config={WEDDING_CONFIG}
+                    activeEventIndex={eventStep}
+                    onSelectEventIndex={(idx) => setEventStep(idx)}
+                  />
+                )}
+
+                {currentCard === 5 && (
+                  <Card06VenueAndClosing
+                    config={WEDDING_CONFIG}
+                    onRestart={() => goToCard(0)}
+                  />
+                )}
+              </div>
+            </main>
+          </div>
+
+          {/* Bottom Interactive Chapter Dock */}
+          <nav
+            aria-label="Invitation Chapters"
+            className="relative z-30 w-full max-w-[440px] mt-2.5 px-2 py-1.5 rounded-full bg-[#07261F]/95 border border-[#E5C158]/55 shadow-xl flex items-center justify-between gap-1 overflow-x-auto no-scrollbar"
+          >
+            {CHAPTERS.map((chap) => {
+              const active = chap.index === currentCard;
+              return (
+                <button
+                  key={chap.code}
+                  onClick={() => goToCard(chap.index)}
+                  className={`flex-1 py-1.5 px-2 rounded-full text-[10px] font-bold tracking-wider uppercase transition-all whitespace-nowrap ${
+                    active
+                      ? 'bg-gradient-to-r from-[#B38728] via-[#FBF5B7] to-[#B38728] text-[#041612] shadow'
+                      : 'text-[#D1FAE5]/70 hover:text-white'
+                  }`}
+                >
+                  <span className="hidden sm:inline">{chap.code} • </span>
+                  <span>{chap.name}</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Fullscreen Lightbox */}
+          <LightboxModal
+            isOpen={lightbox.isOpen}
+            items={lightbox.items}
+            currentIndex={lightbox.currentIndex}
+            onClose={() => setLightbox((s) => ({ ...s, isOpen: false }))}
+            onPrev={() =>
+              setLightbox((s) => ({
+                ...s,
+                currentIndex: (s.currentIndex - 1 + s.items.length) % s.items.length
+              }))
+            }
+            onNext={() =>
+              setLightbox((s) => ({
+                ...s,
+                currentIndex: (s.currentIndex + 1) % s.items.length
+              }))
+            }
+          />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
